@@ -11,23 +11,20 @@ A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry
 O pipeline do projeto conecta o processamento de texto e imagem em uma arquitetura híbrida **CNN (Visão Computacional) + RNN (Processamento de Linguagem Natural)**:
 
 ```mermaid
-graph TD
-    %% Definição dos nós
-    A["📄 captions.txt + train.txt"] --> B["⚙️ dataFunctions.py<br>(Tokenização, Vocabulário e Embeddings BERTimbau)"]
-    
-    C["⚙️ config.py<br>(Hiperparâmetros)"] --> D
-    B --> D["🧠 modelFunctions.py<br>(CNN + RNN)"]
-    
-    D --> E["🏋️‍♂️ train.py<br><b>Gera:</b> modelo .hdf5 + tokenizers .pkl"]
-    E --> F["🧪 test.py<br><b>Avaliação:</b> CCR, Matriz de Confusão, Métricas e BLEU"]
+flowchart TD
+    A["captions.txt + train.txt"] --> B["dataFunctions<br/>Tokenização, Vocabulário e Embeddings BERTimbau"]
 
-    %% Estilização para ficar elegante
-    style A fill:#f9f9f9,stroke:#ddd,stroke-width:1px,color:#333
-    style B fill:#e1f5fe,stroke:#0288d1,stroke-width:1px,color:#01579b
-    style C fill:#f9f9f9,stroke:#ddd,stroke-width:1px,color:#333
-    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:1px,color:#1b5e20
-    style E fill:#fff3e0,stroke:#f57c00,stroke-width:1px,color:#e65100
-    style F fill:#ede7f6,stroke:#7e57c2,stroke-width:1px,color:#4a148c
+    C["config.py<br/>Hiperparâmetros"] --> D["modelFunctions<br/>CNN + RNN"]
+    B --> D
+
+    D --> E["train.py"]
+    E --> F["Modelo (.hdf5)<br/>Tokenizers (.pkl)"]
+
+    E --> G["test.py"]
+    G --> H["CCR<br/>Matriz de Confusão<br/>Métricas<br/>BLEU"]
+```
+
+
 ## 🛠️ Pré-processamento e Dados
 
 ### 1. Normalização de Imagens
