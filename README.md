@@ -1,8 +1,18 @@
 # Projeto Joias
 
-Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens) especializado no domínio de joias. O sistema é capaz de identificar simultaneamente atributos visuais como categoria (*anel, colar, brinco*), cores (*dourado, prata*), design e pedras preciosas, gerando uma descrição textual completa baseada no template:  `[CATEGORIA] [COR] com [DESIGN] e [PEDRA]`
+Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens) especializado no domínio de joias. Este projeto implementa um modelo de Image Captioning especializado no domínio de joias brasileiras, desenvolvido como parte do TCC de MBA. O modelo é capaz de identificar e descrever atributos visuais de joias a partir de imagens, gerando legendas estruturadas no formato: [CATEGORIA] [COR] com design [DESIGN]. ou [CATEGORIA] [COR] com design [DESIGN] e com [PEDRA].
+
+O modelo foi treinado com imagens do catálogo utilizando transfer learning em cascata entre três tarefas.
+
+Os atributos reconhecidos são:
+
+Categoria: Anel, Brinco, Colar — acurácia de 87,35% no teste
+Cor: Dourado, Prata, Dourado e Prata — acurácia de 89,1% no teste
+Design: Orgânico, Escultural, Minimalista, Figurativo, Geométrico, Letter, Maximalista — acurácia de 26,5% no teste
+Pedra: 15 tipos incluindo Pérola, Zircônia, Quartzo e Pedra Natural — acurácia de 0% no teste
 
 A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry_linguistics](https://github.com/jewelryling/jewelry_linguistics)).
+
 
 ---
 
