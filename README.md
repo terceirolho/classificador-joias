@@ -1,4 +1,4 @@
-# Classificador de Joias (classificador-joias)
+# Classificador de Joias
 
 Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens) especializado no domínio de joias. O sistema é capaz de identificar simultaneamente atributos visuais como categoria (*anel, colar, brinco*), cores (*dourado, prata*), design e pedras preciosas, gerando uma descrição textual completa baseada no template:  
 `[CATEGORIA] [COR] com [DESIGN] e [PEDRA]`
