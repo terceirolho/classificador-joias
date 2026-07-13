@@ -11,24 +11,24 @@ A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry
 O pipeline do projeto conecta o processamento de texto e imagem em uma arquitetura híbrida **CNN (Visão Computacional) + RNN (Processamento de Linguagem Natural)**:
 
 captions.txt + train.txt
-│
-▼
-┌───────────────┐
-│dataFunctions  │ ◄─── (Tokenização, Vocabulário e Embeddings BERTimbau)
-└───────┬───────┘
-▼
-┌───────────────┐       ┌───────────────┐
-│modelFunctions │ ◄───  │   config.py   │ (Hiperparâmetros)
-│  (CNN + RNN)  │       └───────────────┘
-└───────┬───────┘
-▼
-┌───────────────┐
-│   train.py    │ ───► Gera: modelo .hdf5 + tokenizers .pkl
-└───────┬───────┘
-▼
-┌───────────────┐
-│    test.py    │ ───► Avaliação: CCR, Matriz de Confusão, Métricas e BLEU
-└───────────────┘
+       │
+       ▼
+ ┌───────────────┐
+ │dataFunctions  │ ◄─── (Tokenização, Vocabulário e Embeddings BERTimbau)
+ └───────┬───────┘
+         ▼
+ ┌───────────────┐       ┌───────────────┐
+ │modelFunctions │ ◄───  │   config.py   │ (Hiperparâmetros)
+ │  (CNN + RNN)  │       └───────────────┘
+ └───────┬───────┘
+         ▼
+ ┌───────────────┐
+ │   train.py    │ ───► Gera: modelo .hdf5 + tokenizers .pkl
+ └───────┬───────┘
+         ▼
+ ┌───────────────┐
+ │    test.py    │ ───► Avaliação: CCR, Matriz de Confusão, Métricas e BLEU
+ └───────────────┘
 
 ## 🛠️ Pré-processamento e Dados
 
