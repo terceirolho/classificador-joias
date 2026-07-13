@@ -1,9 +1,8 @@
 # Projeto Joias
 
-Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens) especializado no domínio de joias. Este projeto implementa um modelo de Image Captioning especializado no domínio de joias brasileiras, desenvolvido como parte do TCC de MBA. O modelo é capaz de identificar e descrever atributos visuais de joias a partir de imagens, gerando legendas estruturadas no formato: [CATEGORIA] [COR] com design [DESIGN]. ou [CATEGORIA] [COR] com design [DESIGN] e com [PEDRA].
+Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens) especializado no domínio de joias. Este projeto implementa um modelo de Image Captioning especializado em rótulos disponiveis em joias de uma marca brasileiras, desenvolvido como parte do TCC de MBA. O modelo foi treinado com o intuito de ser capaz descrever atributos visuais de joias a partir de imagens, gerando legendas estruturadas no formato: [CATEGORIA] [COR] com design [DESIGN]. ou [CATEGORIA] [COR] com design [DESIGN] e com [PEDRA].
 
-O modelo foi treinado com imagens do catálogo utilizando transfer learning em cascata entre três tarefas.
-
+Foi usado transfer learning em cascata entre três tarefas.
 Os atributos reconhecidos são:
 
 Categoria: Anel, Brinco, Colar — acurácia de 87,35% no teste
@@ -11,7 +10,7 @@ Cor: Dourado, Prata, Dourado e Prata — acurácia de 89,1% no teste
 Design: Orgânico, Escultural, Minimalista, Figurativo, Geométrico, Letter, Maximalista — acurácia de 26,5% no teste
 Pedra: 15 tipos incluindo Pérola, Zircônia, Quartzo e Pedra Natural — acurácia de 0% no teste
 
-A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry_linguistics](https://github.com/jewelryling/jewelry_linguistics)).
+A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry_linguistics](https://github.com/jewelryling/jewelry_linguistics)). 
 
 
 ---
@@ -20,25 +19,22 @@ A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry
 
 O pipeline do projeto conecta o processamento de texto e imagem em uma arquitetura híbrida **CNN (Visão Computacional) + RNN (Processamento de Linguagem Natural)**:
 
-```mermaid
+````mermaid
 flowchart TD
-    A["captions.txt + train.txt"] --> B["dataFunctions<br/>Tokenização, Vocabulário e Embeddings BERTimbau"]
-
-    C["config.py<br/>Hiperparâmetros"] --> D["modelFunctions<br/>CNN + RNN"]
-    B --> D
-
-    D --> E["train.py"]
-    E --> F["Modelo (.hdf5)<br/>Tokenizers (.pkl)"]
-
-    E --> G["test.py"]
-    G --> H["CCR<br/>Matriz de Confusão<br/>Métricas<br/>BLEU"]
-```
+    A["Pré-processamento\nNormalização · Splits · Captions"] --> B["dataFunctions.py\nVocabulário e Tokenização"]
+    B --> D["modelFunctions.py\nVGG16 + GRU"]
+    C["config.py"] --> D
+    D --> E["train.py\nTransfer Learning em Cascata\n Dataset [IDENTIFICAR CATEGORIA] → Dataset [IDENTIFICAR COR] → Dataset [GERAR LEGENDAS]"]
+    E --> F["Modelos salvos\n.hdf5 · .pk1"]
+    F --> G["test.py\nInferência e Avaliação"]
+    G --> H["Métricas\nAcurácia · F1 · CCR · BLEU"]
+````
 
 
-## 🛠️ Pré-processamento e Dados
+## 🛠️ Pré-processamento e Dados - Foi complexo e precisou de uma análise profunda
 
 ### 1. Normalização de Imagens
-Antes de alimentar o modelo, as imagens físicas devem passar por uma padronização para garantir a consistência geométrica.
+Antes de alimentar o modelo, as imagens físicas devem passar por uma padronização e ser usado no treinamento do modelo.
 *   **Script:** `normalizacao_img.py`
 *   **Ação:** Redimensiona as imagens para **900×900 pixels**, converte para o espaço de cores **RGB**, aplica preenchimento com **fundo branco** para manter a proporção sem distorcer a joia, e salva o resultado em formato **JPEG**.
 
@@ -88,7 +84,7 @@ Responsável por estruturar a entrada de dados textuais.
 *   `getDataArrays()`: Cruza os dicionários com as listas de splits (`train.txt`/`val.txt`).
 *   `getTokenizers()`: Constrói os mapeamentos numéricos index-para-palavra (`idxtoword`) e palavra-para-index (`wordtoidx`).
 *   `getTokensArrays()`: Transforma as legendas de texto puro em sequências numéricas de índices.
-*   `getBERTimbauEmbeddings()`: Conecta ao modelo linguístico para extrair vetores semânticos de 768 dimensões para cada palavra do vocabulário.
+*   `getBERTimbauEmbeddings()`: Conecta ao modelo linguístico para extrair vetores semânticos de 768 dimensões para cada palavra do vocabulário. **Mas não foi usado 
 *   `getEmbeddingMatrix()`: Estrutura a matriz final de pesos de embedding que será injetada na camada inicial da rede recorrente.
 
 ### 🧠 `modelFunctions.py`
@@ -97,7 +93,7 @@ Gerencia a arquitetura integrada do modelo.
 *   **Módulo Linguístico (RNN):** Constrói a rede recorrente usando células GRU (`build_gru_model()`) *Há LSTM, mas não foi usada (`build_lstm_model()`).
 *   `compile_model()`: Compila o modelo com o otimizador e a função de perda.
 *   `create_generator()`: Pipeline de dados customizado que entrega lotes (*batches*) de dados com embaralhamento ativo a cada nova época de treino.
-*   `generate_caption()`: O motor de inferência que recebe uma imagem e gera a legenda preditiva palavra por palavra até encontrar o token de encerramento.
+*   `generate_caption()`: Recebe imagem e gera a legenda preditiva palavra por palavra até encontrar o token de encerramento.
 
 ### 🏋️‍♂️ `train.py`
 Executa o fluxo completo de aprendizado da rede:
@@ -106,7 +102,7 @@ Executa o fluxo completo de aprendizado da rede:
 3. Constrói o vocabulário a partir dos captions de cada dataset. *** BERTimbau não foi usado.
 4. Aplica class weights carregados do class_weights.json para compensar o desbalanceamento entre classes.
 5. Inicializa o treinamento aplicando callbacks de resiliência: `EarlyStopping` (interrompe o treino se o modelo parar de evoluir) e `ReduceLROnPlateau` (reduz a taxa de aprendizado ao encontrar um platô de perda).
-6. Exporta o modelo final treinado no formato `.hdf5` e os tokenizadores correspondentes.
+6. Entrega o modelo final treinado no formato `.hdf5` e os tokenizadores correspondentes.
 
 ### 🧪 `test.py`
 Avalia rigorosamente o desempenho do modelo no conjunto de testes (`test/`):
@@ -114,6 +110,6 @@ Avalia rigorosamente o desempenho do modelo no conjunto de testes (`test/`):
 2. Avalia a exatidão através da métrica **CCR (Correct Classification Rate)** para verificar se a legenda gerada é 100% idêntica à esperada.
 3. Mede a acurácia isolada por subcategoria (anel, brinco, colar).
 4. Plota matrizes de confusão e calcula métricas clássicas de classificação: Precisão, Recall e F1-Score.
-5. Calcula a métrica **BLEU**, padrão internacional para avaliar a qualidade de textos gerados artificialmente.
+5. Calcula a métrica **BLEU**, padrão internacional para avaliar a qualidade de textos gerados. **Apenas para a TAREFA 3 [GERAR LEGENDAS]
 6. Consolida e exporta todos os relatórios estruturados em arquivos CSV dentro de `models/test_logs/` em especial o test da tarefa de gerar legendas.
  
