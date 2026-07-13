@@ -5,10 +5,10 @@ Este projeto implementa um modelo de **Image Captioning** (Legendagem de Imagens
 Foi usado transfer learning em cascata entre três tarefas.
 Os atributos reconhecidos são:
 
-Categoria: Anel, Brinco, Colar — acurácia de 87,35% no teste
-Cor: Dourado, Prata, Dourado e Prata — acurácia de 89,1% no teste
-Design: Orgânico, Escultural, Minimalista, Figurativo, Geométrico, Letter, Maximalista — acurácia de 26,5% no teste
-Pedra: 15 tipos incluindo Pérola, Zircônia, Quartzo e Pedra Natural — acurácia de 0% no teste
+*   **Categoria** (*Anel, Brinco, Colar*): **87,35%** de acurácia.
+*   **Cor** (*Dourado, Prata, Dourado e Prata*): **89,10%** de acurácia.
+*   **Design** (*Orgânico, Escultural, Minimalista, Figurativo, Geométrico, Letter, Maximalista*): **26,50%** de acurácia.
+*   **Pedra** (*15 tipos distintos, incluindo Pérola, Zircônia, Quartzo, Pedra Natural, etc.*): **0,00%** de acurácia.
 
 A arquitetura foi inspirada no estudo de *Alcalde-Llergo et al., 2025* ([jewelry_linguistics](https://github.com/jewelryling/jewelry_linguistics)). 
 
