@@ -33,12 +33,20 @@ flowchart TD
 
 ## 🛠️ Pré-processamento e Dados - Foi complexo e precisou de uma análise profunda
 
-### 1. Normalização de Imagens
+### Normalização de Imagens
 Antes de alimentar o modelo, as imagens físicas devem passar por uma padronização e ser usado no treinamento do modelo.
 *   **Script:** `normalizacao_img.py`
 *   **Ação:** Redimensiona as imagens para **900×900 pixels**, converte para o espaço de cores **RGB**, aplica preenchimento com **fundo branco** para manter a proporção sem distorcer a joia, e salva o resultado em formato **JPEG**.
 
-### 2. Tratamento de Dataset Desbalanceado
+### Splits 
+Após ter ciência dos dados disponiveis foi feito o split adequado para cada tarefa.
+*   **Script:** `splits.py`
+
+### Extrair_captions
+Após splits foi extraido os captions do csv para txt de cada dataset.
+*   **Script:** `extrair.captions.py`
+
+### Tratamento de Dataset Desbalanceado
 Caso o seu conjunto de dados apresente uma disparidade muito grande na quantidade de imagens por classe, o pipeline oferece como alternativa o uso de Class Weights no treino:
 *   **Ponderação de Perda** Utiliza o arquivo `class_weights.json` gerado no split para penalizar mais severamente os erros nas classes minoritárias durante o cálculo da *Loss Function*.
  
